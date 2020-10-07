@@ -13,7 +13,7 @@ namespace TestTaskWebApi.Controllers
 	[ApiController]
 	public class OrderItemController : ControllerBase
 	{
-		Order_ItemRepository order_itemRepository;
+		private readonly Order_ItemRepository order_itemRepository;
 
 		public OrderItemController(Order_ItemRepository order_itemRepository)
 		{
@@ -43,14 +43,6 @@ namespace TestTaskWebApi.Controllers
 		///<summary>
 		///Create new Order_Item
 		///</summary>
-		//[HttpPost]
-		//public void Create([FromBody]Order_Item order_item)
-		//{
-		//	HttpContext.Response.StatusCode = 201;
-		//	order_itemRepository.Create(order_item);
-
-		//}
-
 		[HttpPost]
 		[Route("~/api/order_item")]
 		public string CreateOrderItem([FromBody] Order_Item order_Item)

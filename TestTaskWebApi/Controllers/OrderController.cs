@@ -14,7 +14,7 @@ namespace TestTaskWebApi.Controllers
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
-		OrderRepository orderRepository;
+		private readonly OrderRepository orderRepository;
 		public OrderController(OrderRepository orderRepository)
 		{
 			this.orderRepository = orderRepository;
@@ -30,24 +30,23 @@ namespace TestTaskWebApi.Controllers
 			return orderRepository.GetAll();
 		}
 
-		/////<summary>
-		/////Get Order By Id
-		/////</summary>
-		//[HttpGet("{id:int}")]
-		//[Route("~/api/order")]
-		//public Order GetById([FromRoute]int id)
-		//{
-		//	return orderRepository.GetById(id);
-		//}
-
 		///<summary>
-		///Get Order By UserId
+		///Get Order By Id
 		///</summary>
 		[HttpGet("{id:int}")]
-		public IQueryable<Order> GetOrderByUserId([FromRoute] int id)
+		public Order GetById([FromRoute] int id)
 		{
-			return orderRepository.GetOrderByUserId(id);
+			return orderRepository.GetById(id);
 		}
+
+		/////<summary>
+		/////Get Orders By UserId
+		/////</summary>
+		//[HttpGet("{id:int}")]
+		//public IQueryable<Order> GetOrderByUserId([FromRoute] int id)
+		//{
+		//	return orderRepository.GetOrderByUserId(id);
+		//}
 
 		///<summary>
 		///Create Order
@@ -66,7 +65,6 @@ namespace TestTaskWebApi.Controllers
 		[HttpPut("{id}")]
 		public void UpdateOrder([FromRoute] int id, [FromBody] Order order)
 		{
-
 			orderRepository.UpdateOrder(id, order);
 		}
 
