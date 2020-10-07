@@ -33,19 +33,16 @@ namespace DAL.Repositories
 		public void UpdateOrderItem(int id, Order_Item Entity)
 		{
 			var order_item = DbContext.Order_Items.FirstOrDefault(x => x.Id == id);
-			//HttpResponseMessage responce = null;
 			if (order_item != null)
 			{
 				order_item.Quantity = Entity.Quantity;
 				order_item.Product_Id = Entity.Product_Id;
 				DbContext.SaveChanges();
-				//return responce = new HttpResponseMessage(HttpStatusCode.OK);
 			}
 			else
 			{
 				throw new ArgumentException();
 			}
-			//else return responce = new HttpResponseMessage(HttpStatusCode.NotFound);
 		}
 	}
 }

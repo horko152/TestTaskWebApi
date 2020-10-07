@@ -13,7 +13,7 @@ namespace DAL.Entities
 
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		[Column("id")]
+		[Column("id")] 
 		public int Id { get; set; }
 
 		[Required]

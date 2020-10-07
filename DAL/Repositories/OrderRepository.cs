@@ -29,24 +29,20 @@ namespace DAL.Repositories
 			{
 				throw new ArgumentException();
 			}
-			//return DbContext.Orders.ToList().Where(x => x.User_Id == id).AsQueryable();
 		}
 		public void UpdateOrder(int id, Order Entity)
 		{
 			var order = DbContext.Orders.FirstOrDefault(x => x.Id == id);
-			//HttpResponseMessage responce = null;
 			if (order != null)
 			{
 				order.Comment = Entity.Comment;
 				order.User_Id = Entity.User_Id;
 				DbContext.SaveChanges();
-				//return responce = new HttpResponseMessage(HttpStatusCode.OK);
 			}
 			else
 			{
 				throw new ArgumentException();
 			}
-			//else return responce = new HttpResponseMessage(HttpStatusCode.NotFound);
 		}
 	}
 }
