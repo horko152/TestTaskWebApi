@@ -53,15 +53,12 @@ namespace TestTaskWebApi.Controllers
 		///Update Product
 		///</summary>
 		[HttpPut("{id}")]
-		public IActionResult UpdateProduct(int id, Product product)
+		public ActionResult UpdateProduct(int id, Product product)
 		{
-			if (id != product.Id)
-			{
-				return BadRequest();
-			}
 			try
 			{
 				productRepository.UpdateProduct(id, product);
+				return Ok();
 			}
 			catch (DbUpdateConcurrencyException)
 			{
@@ -74,8 +71,6 @@ namespace TestTaskWebApi.Controllers
 					throw;
 				}
 			}
-
-			return NoContent();
 		}
 
 		// POST: api/Product
@@ -102,9 +97,14 @@ namespace TestTaskWebApi.Controllers
 		///</summary>
 		/// <param name="id"></param> 
 		[HttpDelete("{id}")]
-		public void DeleteProduct(int id)
+		public ActionResult DeleteProduct(int id)
 		{
-			productRepository.Delete(id);
+			int res = productRepository.Delete(id);
+			if (res != 0)
+			{
+				return Ok();
+			}
+			return NotFound();
 		}
 
 		private bool ProductExists(int id)

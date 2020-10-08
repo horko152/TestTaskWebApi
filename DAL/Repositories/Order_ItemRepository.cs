@@ -41,7 +41,7 @@ namespace DAL.Repositories
 			}
 			else
 			{
-				throw new ArgumentException();
+				throw new ArgumentException("Object does not exist");
 			}
 		}
 	}

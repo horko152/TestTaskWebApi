@@ -53,15 +53,12 @@ namespace TestTaskWebApi.Controllers
 		///Update User
 		///</summary>
 		[HttpPut("{id}")]
-		public IActionResult UpdateUser(int id, User user)
+		public ActionResult UpdateUser(int id, User user)
 		{
-			if (id != user.Id)
-			{
-				return BadRequest();
-			}
 			try
 			{
 				userRepository.UpdateUser(id, user);
+				return Ok();
 			}
 			catch (DbUpdateConcurrencyException)
 			{
@@ -74,8 +71,6 @@ namespace TestTaskWebApi.Controllers
 					throw;
 				}
 			}
-
-			return NoContent();
 		}
 
 		// POST: api/User
@@ -102,9 +97,14 @@ namespace TestTaskWebApi.Controllers
 		///</summary>
 		/// <param name="id"></param> 
 		[HttpDelete("{id}")]
-		public void DeleteUser(int id)
+		public ActionResult DeleteUser(int id)
 		{
-			userRepository.Delete(id);
+			int res = userRepository.Delete(id);
+			if (res != 0)
+			{
+				return Ok();
+			}
+			return NotFound();
 		}
 
 		private bool UserExists(int id)

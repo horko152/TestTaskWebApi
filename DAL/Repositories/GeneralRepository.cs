@@ -27,7 +27,7 @@ namespace DAL.Repositories
 			}
 			else
 			{
-				throw new ArgumentException();
+				throw new ArgumentException("Object does not exist");
 			}
 		}
 
@@ -46,18 +46,16 @@ namespace DAL.Repositories
 			}
 		}
 
-		public void Delete(int id)
+		public int Delete(int id)
 		{
+			int res = 0;
 			T entity = DbContext.Find<T>(id);
 			if (entity != null)
 			{
 				DbContext.Remove(entity);
-				DbContext.SaveChanges();
+				res = DbContext.SaveChanges();
 			}
-			else
-			{
-				throw new ArgumentException();
-			}
+			return res;
 		}
 	}
 }

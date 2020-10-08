@@ -22,7 +22,6 @@ namespace DAL.Entities
 		[Column("name")]
 		public string Name { get; set; }
 
-		[Required]
 		[Column("photo")]
 		public string Photo { get; set; }
 

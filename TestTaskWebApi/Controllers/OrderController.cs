@@ -6,6 +6,7 @@ using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace TestTaskWebApi.Controllers
@@ -25,18 +26,24 @@ namespace TestTaskWebApi.Controllers
 		///</summary>
 		[HttpGet]
 		[Route("~/api/orders")]
-		public IQueryable<Order> GetAll()
+		public async Task<ActionResult<IEnumerable<Order>>> GetAll()
 		{
-			return orderRepository.GetAll();
+			return await orderRepository.GetAll().ToListAsync();
 		}
 
 		///<summary>
 		///Get Order By Id
 		///</summary>
 		[HttpGet("{id:int}")]
-		public Order GetById([FromRoute] int id)
+		public ActionResult<Order> GetOrder([FromRoute] int id)
 		{
-			return orderRepository.GetById(id);
+			var order = orderRepository.GetById(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
+
+			return order;
 		}
 
 		/////<summary>
@@ -48,14 +55,22 @@ namespace TestTaskWebApi.Controllers
 		//	return orderRepository.GetOrderByUserId(id);
 		//}
 
+		// POST: api/Order
 		///<summary>
 		///Create Order
 		///</summary>
+		/// <param name="item"></param>
+		/// <response code="200">OK</response>
+		/// <response code="201">Item created</response>
+		/// <response code="400">If the item is null</response>
 		[HttpPost]
-		public int CreateOrder([FromBody] Order order)
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public ActionResult<Order> CreateOrder(Order order)
 		{
-			return orderRepository.CreateOrder(order);
-
+			orderRepository.CreateOrder(order);
+			return CreatedAtAction("GetOrder", new { id = order.Id }, order);
 		}
 
 
@@ -63,9 +78,25 @@ namespace TestTaskWebApi.Controllers
 		///Update Order
 		///</summary>
 		[HttpPut("{id}")]
-		public void UpdateOrder([FromRoute] int id, [FromBody] Order order)
+		public ActionResult UpdateOrder([FromRoute] int id, [FromBody] Order order)
 		{
-			orderRepository.UpdateOrder(id, order);
+			try
+			{
+				orderRepository.UpdateOrder(id, order);
+				return Ok();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!OrderExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
 		}
 
 		///<summary>
@@ -73,10 +104,18 @@ namespace TestTaskWebApi.Controllers
 		///</summary>
 		/// <param name="id"></param> 
 		[HttpDelete("{id}")]
-		public void Delete([FromRoute] int id)
+		public ActionResult Delete([FromRoute] int id)
 		{
-			orderRepository.Delete(id);
+			int res = orderRepository.Delete(id);
+			if (res != 0)
+			{
+				return Ok();
+			}
+			return NotFound();
 		}
-
+		private bool OrderExists(int id)
+		{
+			return orderRepository.GetAll().Any(e => e.Id == id);
+		}
 	}
 }

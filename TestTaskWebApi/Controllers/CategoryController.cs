@@ -53,15 +53,12 @@ namespace TestTaskWebApi.Controllers
 		///Update Genre
 		///</summary>
 		[HttpPut("{id}")]
-		public IActionResult UpdateCategory(int id, Category category)
+		public ActionResult UpdateCategory(int id, Category category)
 		{
-			if (id != category.Id)
-			{
-				return BadRequest();
-			}
 			try
 			{
 				categoryRepository.UpdateCategory(id, category);
+				return Ok();
 			}
 			catch (DbUpdateConcurrencyException)
 			{
@@ -74,8 +71,6 @@ namespace TestTaskWebApi.Controllers
 					throw;
 				}
 			}
-
-			return NoContent();
 		}
 
 		// POST: api/Category
@@ -102,9 +97,14 @@ namespace TestTaskWebApi.Controllers
 		///</summary>
 		/// <param name="id"></param> 
 		[HttpDelete("{id}")]
-		public void DeleteCategory(int id)
+		public ActionResult DeleteCategory(int id)
 		{
-			categoryRepository.Delete(id);
+			int res = categoryRepository.Delete(id);
+			if(res != 0)
+			{
+				return Ok();
+			}
+			return NotFound();
 		}
 
 		private bool CategoryExists(int id)

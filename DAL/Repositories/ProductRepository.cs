@@ -38,13 +38,15 @@ namespace DAL.Repositories
 			{
 				product.Name = Entity.Name;
 				product.Description = Entity.Description;
+				product.Photo = Entity.Photo;
 				product.Quantity = Entity.Quantity;
 				product.Price = Entity.Price;
+				product.Category_Id = Entity.Category_Id;
 				DbContext.SaveChanges();
 			}
 			else
 			{
-				throw new ArgumentException();
+				throw new ArgumentException("Object does not exist");
 			}
 		}
 

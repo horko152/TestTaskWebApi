@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using DAL;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +34,12 @@ namespace TestTaskWebApi
 			{
 				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
 			});
+			services.AddSingleton<ShopDbContext>();
+			services.AddSingleton<UserRepository>();
+			services.AddSingleton<ProductRepository>();
+			services.AddSingleton<CategoryRepository>();
+			services.AddSingleton<Order_ItemRepository>();
+			services.AddSingleton<OrderRepository>();
 
 			services.AddSwaggerGen(c =>
 			{

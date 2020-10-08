@@ -24,11 +24,12 @@ namespace DAL.Repositories
 			if (category != null)
 			{
 				category.Name = Entity.Name;
+				category.Description = Entity.Description;
 				DbContext.SaveChanges();
 			}
 			else
 			{
-				throw new ArgumentException();
+				throw new ArgumentException("Object does not exist");
 			}
 		}
 	}
